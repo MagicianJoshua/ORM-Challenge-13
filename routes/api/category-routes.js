@@ -3,9 +3,12 @@ const { Category, Product } = require('../../models');
 
 // The `/api/categories` endpoint
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   // find all categories
   // be sure to include its associated Products
+  const data = await Category.findAll();
+
+  return res.json(data);
 });
 
 router.get('/:id', (req, res) => {
