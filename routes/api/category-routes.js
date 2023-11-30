@@ -19,16 +19,41 @@ router.get('/:id', async (req, res) => {
   // be sure to include its associated Products
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // create a new category
-});
+  
 
-router.put('/:id', (req, res) => {
+// const userInfoString = JSON.stringify(userInfoObj)
+const categoryData = await Category.create(req.body); 
+if (!categoryData) {
+  return res.status(404).json({ message: 'formatting incorrect' });
+}
+res.json(categoryData)
+}
+);
+
+router.put('/:id', async (req, res) => {
   // update a category by its `id` value
+  const data = await Category.findByPk(req.params.id);
+
+  if (Category) {
+    await data.update(req.body);
+    res.send({message:"Category updated successfully"})
+  }else {
+    res.send({message:"Could not find category id"});
+  }
+
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
+  const data = await Category.findByPk(req.params.id)
+  if (!data) {
+    return res.status(404).json({message:"ID Not found"})
+  }
+  data.destroy();
+  return res.json("Category deleted");
+  
 });
 
 module.exports = router;
